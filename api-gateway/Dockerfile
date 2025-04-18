@@ -1,7 +1,6 @@
 FROM node:18-alpine
 ENV NODE_ENV=production PORT=3000
-WORKDIR /usr/src/app
-COPY package*.json ./
+WORKDIR api-gateway
 COPY . .
 RUN npm install
 EXPOSE 3000
