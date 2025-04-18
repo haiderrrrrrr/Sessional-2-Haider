@@ -13,44 +13,43 @@ services:
   api-gateway:
     build: ./api-gateway
     container_name: api-gateway
-    ports:
-      - "3000:3000"
+    ports: ["3000:3000"]
     depends_on:
-      - menu-service
-      - order-service
-      - payment-service
-      - inventory-service
-      - customer-service
+      - menu-services
+      - order-services
+      - payment-services
+      - inventory-services
+      - customer-services
 
-  menu-service:
-    build: ./menu-service
-    container_name: menu-service
+  menu-services:
+    build: ./menu-services
+    container_name: menu-services
     depends_on: [ mongodb ]
 
-  order-service:
-    build: ./order-service
-    container_name: order-service
+  order-services:
+    build: ./order-services
+    container_name: order-services
     depends_on:
       - mongodb
-      - menu-service
-      - inventory-service
-      - customer-service
+      - menu-services
+      - inventory-services
+      - customer-services
 
-  payment-service:
-    build: ./payment-service
-    container_name: payment-service
+  payment-services:
+    build: ./payment-services
+    container_name: payment-services
     depends_on:
       - mongodb
-      - order-service
+      - order-services
 
-  inventory-service:
-    build: ./inventory-service
-    container_name: inventory-service
+  inventory-services:
+    build: ./inventory-services
+    container_name: inventory-services
     depends_on: [ mongodb ]
 
-  customer-service:
-    build: ./customer-service
-    container_name: customer-service
+  customer-services:
+    build: ./customer-services
+    container_name: customer-services
     depends_on: [ mongodb ]
 
 volumes:
