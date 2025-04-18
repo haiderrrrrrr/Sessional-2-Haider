@@ -1,4 +1,4 @@
-name: Build and Push Café Images
+name: Build‑only check            # makes sure every service still builds
 
 on:
   push:
@@ -6,11 +6,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-push:
+  build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service:
+        svc:
           - api-gateway
           - menu-service
           - order-service
@@ -20,21 +20,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - uses: docker/setup-qemu-action@v3
-
       - uses: docker/setup-buildx-action@v3
 
-      - uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - uses: docker/build-push-action@v5
-        with:
-          context: ./${{ matrix.service }}
-          file: ./${{ matrix.service }}/Dockerfile
-          push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/cafe-${{ matrix.service }}:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/cafe-${{ matrix.service }}:${{ github.sha }}
+      - name: Build ${{ matrix.svc }}
+        run: |
+          docker build -t test-${{ matrix.svc }} ./${{ matrix.svc }}
