@@ -1,16 +1,17 @@
 version: "3.9"
+
 services:
   mongodb:
     image: mongo:6.0
     container_name: mongodb
     restart: always
-    volumes:
-      - mongo-data:/data/db
     ports:
       - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
 
   api-gateway:
-    image: ${DOCKERHUB_USERNAME}/cafe-api-gateway:latest
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/cafe-api-gateway:latest
     container_name: api-gateway
     ports:
       - "3000:3000"
@@ -22,12 +23,12 @@ services:
       - customer-service
 
   menu-service:
-    image: ${DOCKERHUB_USERNAME}/cafe-menu-service:latest
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/cafe-menu-service:latest
     container_name: menu-service
     depends_on: [ mongodb ]
 
   order-service:
-    image: ${DOCKERHUB_USERNAME}/cafe-order-service:latest
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/cafe-order-service:latest
     container_name: order-service
     depends_on:
       - mongodb
@@ -36,19 +37,19 @@ services:
       - customer-service
 
   payment-service:
-    image: ${DOCKERHUB_USERNAME}/cafe-payment-service:latest
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/cafe-payment-service:latest
     container_name: payment-service
     depends_on:
       - mongodb
       - order-service
 
   inventory-service:
-    image: ${DOCKERHUB_USERNAME}/cafe-inventory-service:latest
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/cafe-inventory-service:latest
     container_name: inventory-service
     depends_on: [ mongodb ]
 
   customer-service:
-    image: ${DOCKERHUB_USERNAME}/cafe-customer-service:latest
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/cafe-customer-service:latest
     container_name: customer-service
     depends_on: [ mongodb ]
 
