@@ -5,52 +5,49 @@ services:
     image: mongo:6.0
     container_name: mongodb
     restart: always
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
+    ports: ["27017:27017"]
+    volumes: [ mongo-data:/data/db ]
 
   api-gateway:
     image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/cafe-api-gateway:latest
     container_name: api-gateway
-    ports:
-      - "3000:3000"
+    ports: ["3000:3000"]
     depends_on:
-      - menu-service
-      - order-service
-      - payment-service
-      - inventory-service
-      - customer-service
+      - menu-services
+      - order-services
+      - payment-services
+      - inventory-services
+      - customer-services
 
-  menu-service:
-    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/cafe-menu-service:latest
-    container_name: menu-service
+  menu-services:
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/cafe-menu-services:latest
+    container_name: menu-services
     depends_on: [ mongodb ]
 
-  order-service:
-    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/cafe-order-service:latest
-    container_name: order-service
+  order-services:
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/cafe-order-services:latest
+    container_name: order-services
     depends_on:
       - mongodb
-      - menu-service
-      - inventory-service
-      - customer-service
+      - menu-services
+      - inventory-services
+      - customer-services
 
-  payment-service:
-    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/cafe-payment-service:latest
-    container_name: payment-service
+  payment-services:
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/cafe-payment-services:latest
+    container_name: payment-services
     depends_on:
       - mongodb
-      - order-service
+      - order-services
 
-  inventory-service:
-    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/cafe-inventory-service:latest
-    container_name: inventory-service
+  inventory-services:
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/cafe-inventory-services:latest
+    container_name: inventory-services
     depends_on: [ mongodb ]
 
-  customer-service:
-    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/cafe-customer-service:latest
-    container_name: customer-service
+  customer-services:
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/cafe-customer-services:latest
+    container_name: customer-services
     depends_on: [ mongodb ]
 
 volumes:
