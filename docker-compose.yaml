@@ -1,0 +1,56 @@
+version: "3.9"
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "3000:3000"
+    depends_on:
+      - menu-service
+      - order-service
+      - payment-service
+      - inventory-service
+      - customer-service
+
+  menu-service:
+    build: ./menu-service
+    container_name: menu-service
+    depends_on: [ mongodb ]
+
+  order-service:
+    build: ./order-service
+    container_name: order-service
+    depends_on:
+      - mongodb
+      - menu-service
+      - inventory-service
+      - customer-service
+
+  payment-service:
+    build: ./payment-service
+    container_name: payment-service
+    depends_on:
+      - mongodb
+      - order-service
+
+  inventory-service:
+    build: ./inventory-service
+    container_name: inventory-service
+    depends_on: [ mongodb ]
+
+  customer-service:
+    build: ./customer-service
+    container_name: customer-service
+    depends_on: [ mongodb ]
+
+volumes:
+  mongo-data:
